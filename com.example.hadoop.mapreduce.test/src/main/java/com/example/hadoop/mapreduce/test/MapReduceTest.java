@@ -13,13 +13,17 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.CompressionCodecFactory;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileOutputFormat;
+import org.apache.hadoop.mapred.InputSplit;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.JobConfigurable;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.RecordReader;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.TextInputFormat;
@@ -74,6 +78,23 @@ public class MapReduceTest {
             }
             result.set(sum);
             output.collect(key, result);
+        }
+    }
+
+    public static class InputParser extends FileInputFormat<LongWritable, Text> implements
+            JobConfigurable {
+        
+        private CompressionCodecFactory compressionCodecs = null;
+
+        @Override
+        public void configure(JobConf conf) {
+            compressionCodecs = new CompressionCodecFactory(conf);
+        }
+
+        @Override
+        public RecordReader<LongWritable, Text> getRecordReader(InputSplit split, JobConf job,
+                Reporter reporter) throws IOException {
+            return null;
         }
     }
 
