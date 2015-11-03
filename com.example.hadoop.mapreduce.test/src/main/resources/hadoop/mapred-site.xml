@@ -30,5 +30,4 @@
         <name>mapreduce.jobhistory.webapp.address</name>
         <value>puroc-centos:19888</value>
     </property>
-
 </configuration>
